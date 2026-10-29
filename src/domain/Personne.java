@@ -1,4 +1,8 @@
-package allocation_room_project.src.domain;
+package domain;
+
+import java.util.Set;
+
+
 
 /**
  *Class décrivant une personne du groupe
@@ -7,6 +11,8 @@ package allocation_room_project.src.domain;
  */
 public class Personne {
     private String nom;
+    private Preferences preferences;
+    private Set<Personne> personnesNonAimees;
 
     /**
      * Crée une personne avec le nom donné.
@@ -40,5 +46,11 @@ public class Personne {
     @Override
     public String toString() {
         return nom;
+    }
+     public Preferences getPreferences() {
+        return preferences;
+    }
+    public Set<Personne> getPersonnesNonAimees() {
+    return personnesNonAimees;
     }
 }
