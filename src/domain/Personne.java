@@ -7,9 +7,9 @@ import java.util.Set;
  * @author Dina
  */
 public class Personne {
-    private String nom;
-    private Set <Personne> personnesNonAimees;
-    private Preferences preferences;
+    private String nom; //nom de la personne
+    private Set <Personne> personnesNonAimees; //liste des personnes que la personne courante n'aime pas
+    private Preferences preferences; //toutes les préférences de la personne courante en terme de chambre
 
     /**
      * Crée une personne avec le nom donné et initialise sa liste de préférence en terme de chambre et la liste des personens qu'elle n'aime pas.

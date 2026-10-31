@@ -9,7 +9,7 @@ import java.util.List;
  * @author Dina
  */
 public class Preferences{
-    private List<Integer> chambresPref;
+    private List<Integer> chambresPref; //liste des chambres préférées d'une personne
 
     /**
      * Crée la liste des préférences vides
@@ -31,7 +31,7 @@ public class Preferences{
     /**
      * Retourne le rang d'une chambre dans le classement de la personne
      * @param chambre la chambre qu'on veut determiner
-     * @return rang le rang de la chambre passée en paramètre
+     * @return rang de la chambre passée en paramètre
      */
     public int rangChambre(int chambre){
         if (!chambresPref.contains(chambre)) {
