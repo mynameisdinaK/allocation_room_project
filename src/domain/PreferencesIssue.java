@@ -2,6 +2,7 @@ package domain;
 
 /**
  * Enumeration listant le type de problemes auquel on peut être confronté dans les preferences de chambre d'une personne
+ * @author Dina
  * 
  */
 public enum PreferencesIssue {
