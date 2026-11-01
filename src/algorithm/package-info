@@ -1,0 +1,11 @@
+
+/**
+ * Contient les algorithmes d'affectation des chambres et de calcul du coût de jalousie.
+ *
+ * L'affectation naïve attribue à chaque personne sa chambre préférée encore disponible, selon l'ordre de traitement des personnes.
+ *
+ * Le calcul du coût de jalousie compte chaque personne qui préfère la chambre d'une personne qu'elle n'aime pas à sa propre chambre, une seule fois.
+ *
+ * @author Rima
+ */
+package algorithm;
