@@ -31,7 +31,7 @@ public class Groupe {
         }
     }
 
-    //Getters et Settres================
+    //Getters et Setters================
     public int getTaille() {
         return taille;
     }
