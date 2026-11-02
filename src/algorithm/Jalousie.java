@@ -5,7 +5,6 @@ import domain.Personne;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Calcule le coût d'une affectation (= nombre de personnes jalouses) Elle possède une unique méthode.
@@ -45,7 +44,7 @@ public class Jalousie {
             // on s'arrête dès qu'on trouve une raison d'être jalouse
             jaloux = false;
             nonAimees = personne.getPersonnesNonAimees().iterator();
-            
+
             while (!jaloux && nonAimees.hasNext()) {
                 autre = nonAimees.next();
                 rangAutre = personne.getPreferences().rangChambre(affectation.chambreDe(autre));

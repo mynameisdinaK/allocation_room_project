@@ -6,11 +6,9 @@ import domain.Personne;
 
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
-/**Construit une première affrctation naive des personnes à leur chambres.
+/**Construit une première affectation naive des personnes à leur chambres.
  * Raisonnement: on va commencer par affecter la chambre préféree à la personne qui a le plus de relations.
   @author Rima
     */
@@ -58,8 +56,6 @@ public class AffectationNaive {
         Personne personne;
         List<Integer> chambresPref;
         List<Personne> restantes;
-        List<Integer> chambresAttribuees = new ArrayList<>();
-        Map<Personne, Integer> affectation = new LinkedHashMap<>();
         Affectation resultat = new Affectation();
 
         if (personnes == null || personnes.isEmpty()) {
