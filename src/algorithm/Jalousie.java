@@ -1,63 +1,62 @@
 package algorithm;
 
+import domain.Affectation;
 import domain.Personne;
 
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Calcule le nombre de personnes jalouses dans une affectation
+ * Calcule le coût d'une affectation (= nombre de personnes jalouses) Elle possède une unique méthode.
  * @author Rima
  */
 public class Jalousie {
 
     /**
-     Calcule le coût d'une affectation
-      Une personne est jalouse si au moins une personne qu'elle n'aime pas possède une chambre qu'elle préfère à la sienne 
-      et  Chaque personne jalouse compte une seule fois
-
+     * 
+     * Rappel: Une personne est jalouse si au moins une personne qu'elle n'aime pas possède une chambre qu'elle préfère à la sienne 
+      Chaque personne jalouse compte pour une seule fois
+     * @param personnes le groupe
+     * @param affectation l'affectation à évaluer (affectation naive dans cette premiere partie)
+     * @return le nombre de personnes jalouses
+     * @throws IllegalArgumentException si un paramètre est null ou si une personne n'a pas de chambre
      */
-    public static int calculerCout(
-            List<Personne> personnes,
-            Map<Personne, Integer> affectation) {
 
-        if (personnes == null || affectation == null) {
-            throw new IllegalArgumentException(
-                    "Le groupe et l'affectation ne doivent pas être null.");
-        }
-
+      public static int calculerCout(List<Personne> personnes, Affectation affectation){
         int nombreJaloux = 0;
-        for (Personne personne : personnes) {// Examiner chaque personne du groupe
+        int i;
+        int rangPersonnel;
+        int rangAutre;
+        boolean jaloux;
+        Personne personne;
+        Personne autre;
+        Iterator<Personne> nonAimees;
 
-            Integer chambrePersonne = affectation.get(personne);
-            if (chambrePersonne == null) {
-                throw new IllegalArgumentException(
-                        "Aucune chambre attribuée à " + personne);
-            }
+        if (personnes == null || affectation == null)
+            throw new IllegalArgumentException("Le groupe et l'affectation sont null....");
 
-            
-            int rangPersonnel = personne.getPreferences().rangChambre(chambrePersonne);
 
-            //vérifier les personnes qu'elle n'aime pas
-            for (Personne autre : personne.getPersonnesNonAimees()) {
+        i = 0;
+        while (i < personnes.size()) {
+            personne = personnes.get(i);
+            rangPersonnel = personne.getPreferences().rangChambre(affectation.chambreDe(personne));
 
-                Integer chambreAutre = affectation.get(autre);
+            // on s'arrête dès qu'on trouve une raison d'être jalouse
+            jaloux = false;
+            nonAimees = personne.getPersonnesNonAimees().iterator();
 
-                if (chambreAutre == null) {
-                    throw new IllegalArgumentException("Aucune chambre attribuée à " + autre);
-                }
-
-                // Rang de la chambre de l'autre personne, évalué selon les préférences de la personne courante.
-                int rangAutre = personne.getPreferences().rangChambre(chambreAutre);
-
-                
-                if (rangAutre < rangPersonnel) {// Un rang plus petit signifie une chambre préférée.
-                    nombreJaloux++;
-
-                   
-                    break;
+            while (!jaloux && nonAimees.hasNext()) {
+                autre = nonAimees.next();
+                rangAutre = personne.getPreferences().rangChambre(affectation.chambreDe(autre));
+                if (rangAutre < rangPersonnel) {
+                    jaloux = true;
                 }
             }
+
+            if (jaloux) {
+                nombreJaloux++;
+            }
+            i++;
         }
 
         return nombreJaloux;

@@ -1,63 +1,102 @@
 package algorithm;
 
+import domain.Affectation;
 import domain.Personne;
-import domain.Preferences;
+
 
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
-/**Construit une affectation initiale des chambres
-  Chaque personne reçoit sa chambre préférée encore disponible
-  Les personnes sont traitées dans l'ordre de la liste fournie.
+/**Construit une première affectation naive des personnes à leur chambres.
+ * Raisonnement: on va commencer par affecter la chambre préféree à la personne qui a le plus de relations.
   @author Rima
     */
 
 public class AffectationNaive {
 
-  
-    public static Map<Personne, Integer> calculer(List<Personne> personnes) {
-         if (personnes == null || personnes.isEmpty()) {
-            throw new IllegalArgumentException("Le groupe doit contenir au moins une personne.");
+    /**
+     * Cherche la personne qui a le plus de relations qui ne s'aiment pas.
+     *
+     * @param personnes la liste des personnes qui n'ont pas encore de chambre
+     * @return l'indice de cette personne, la première de la liste en cas d'égalité
+     */
+    private static int personnePlusDeRelation(List<Personne> personnes) {
+        int i = 1;
+        int indiceMax = 0;
+        int nombreRelations;
+
+        while (i < personnes.size()) {
+            nombreRelations = personnes.get(i).getPersonnesNonAimees().size();
+            if (nombreRelations > personnes.get(indiceMax).getPersonnesNonAimees().size()) {
+                indiceMax = i;
+            }
+            i++;
         }
 
-        int n = personnes.size();
-
-        // verifier les préférences avant de commencer l'affectation
-        for (Personne personne : personnes) {
-            if (personne == null) {
-                throw new IllegalArgumentException( "Le groupe contient une personne invalide.");
-             }
-
-            if (personne.getPreferences() == null || !personne.getPreferences().estComplete(n)) {
-                throw new IllegalArgumentException("Les préférences de " + personne + " sont invalides ou incomplètes.");
+        return indiceMax;
     }
-}
 
-        
-        List<Integer> chambresAttribuees = new ArrayList<>();// c'est les chambres déjà attribuées
 
-        
-        Map<Personne, Integer> affectation = new LinkedHashMap<>();//l'affectation finale : personne = numéro de chambre
 
-        // Traiter les personnes dans l'ordre de la liste
-        for (Personne personne : personnes) {
-            Preferences preferences = personne.getPreferences();
+    /**
+     * Construit l'affectation naïve d'un groupe.
+     *
+     * @param personnes le groupe, chaque personne doit avoir des préférences complètes
+     * @return l'affectation
+     * @throws IllegalArgumentException si le groupe est vide ou si des préférences sont invalides
+     */
+    public static Affectation affectationNaive(List<Personne> personnes) {
+        int taille;
+        int i;
+        int indice;
+        int rang;
+        int chambre;
+        boolean chambreTrouvee;
+        Personne personne;
+        List<Integer> chambresPref;
+        List<Personne> restantes;
+        Affectation resultat = new Affectation();
 
-            // Parcourir les chambres de la plus préférée à la moins préférée
-            for (int chambre : preferences.getChambresPref()) {
-                if (!chambresAttribuees.contains(chambre)) {// Prendre la première chambre encore disponible
-                    affectation.put(personne, chambre);
-                    chambresAttribuees.add(chambre);
+        if (personnes == null || personnes.isEmpty()) {
+            throw new IllegalArgumentException("Il devrait y avoir au moins une personne....");
+        }
+        taille = personnes.size();
 
-                    
-                    break;// La personne a reçu une chambre : passer à la suivante
+        // vérification des préférences
+        i = 0;
+        while (i < taille) {
+            personne = personnes.get(i);
+            if (personne == null) {
+                throw new IllegalArgumentException("Le groupe contient une personne invalide....");
+            }
+            if (personne.getPreferences() == null || !personne.getPreferences().estComplete(taille)) {
+                throw new IllegalArgumentException("Les préférences de " + personne + " sont invalides ou alors incomplètes.");
+            }
+            i++;
+        }
+
+        restantes = new ArrayList<>(personnes);
+
+        //la personne avec le plus de relations à chaque tour prend sa chambre préférée
+        while (!restantes.isEmpty()) {
+            indice = personnePlusDeRelation(restantes);
+            personne = restantes.remove(indice);
+            chambresPref = personne.getPreferences().getChambresPref();
+            rang = 0;
+            chambreTrouvee = false;
+
+            while (!chambreTrouvee && rang < chambresPref.size()) {
+                chambre = chambresPref.get(rang);
+                
+                if (!resultat.chambreEstPrise(chambre)) {
+                    resultat.attribuerChambre(personne, chambre);
+                    chambreTrouvee = true;
                 }
+                rang++;
             }
         }
 
-        return affectation;
+        return resultat;
     }
 }

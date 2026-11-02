@@ -82,6 +82,7 @@ public class Groupe {
      * @param nom nom de la personne
      * @return la personne si personne porte ce nom
      */
+    //TODO: le menu doit tester !!if (personne == null)!! 
     public Personne rechercheNomPersonne(String nom) {
         String nomBonFormat = nom.trim().toUpperCase();
         Personne personneTrouvee = null;
@@ -93,8 +94,9 @@ public class Groupe {
             personne = personnes.get(i);
             if (personne.getNom().equals(nomBonFormat)) {
                 personneTrouvee = personne;
+                trouve= true;
             }
-            trouve= true;
+            
             i++;}
         return personneTrouvee;
     }
